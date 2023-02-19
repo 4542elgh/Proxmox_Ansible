@@ -1,0 +1,13 @@
+---
+  - name: "Proxmox Swarm Worker"
+    hosts: swarmworker
+    remote_user: root
+    # To future self, all roles are stored under roles/role_name/tasks/main.yaml
+    roles:
+        - mountsmb
+    vars_files:
+      - ./vault/sudo_password.yaml
+    vars:
+      ansible_become_method: su 
+      ansible_become_user: root
+      ansible_become_pass: "{{ sudo_password }}"

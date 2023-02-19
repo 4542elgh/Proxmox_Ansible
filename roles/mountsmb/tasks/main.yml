@@ -1,0 +1,60 @@
+---
+- name: "Install CIFS"
+  apt:
+    name: 
+      - cifs-utils
+    state: present
+  become: true
+
+- name: "Create Download folder"
+  ansible.builtin.file:
+    path: /mnt/Download
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: "Add Download SMB mount"
+  lineinfile:
+    dest: /etc/fstab
+    line: "//192.168.1.31/Download /mnt/Download cifs credentials=/root/.smbcredentials,iocharset=utf8,file_mode=0777,dir_mode=0777"
+    owner: root
+  become: true
+
+- name: "Copy .smbcredentials"
+  ansible.builtin.copy:
+    src: /root/.smbcredentials
+    dest: /root/.smbcredentials
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: "Mount Download SMB drive"
+  ansible.builtin.shell: mount -a
+  become: true
+
+    # - name: "Install Docker GPG key"
+    # ansible.builtin.shell:  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    # become: true
+    # - name: "Setup Docker Repo"
+    # ansible.builtin.shell:  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    # become: true
+    # - name: "Update all packages to their latest version"
+    # ansible.builtin.apt:
+    # name: "*"
+    # state: latest
+    # become: true
+    # - name: "Install Docker"
+    # apt:
+    # name: 
+    # - docker-ce
+    # - docker-ce-cli
+    # - containerd.io
+    # - docker-buildx-plugin
+    # - docker-compose-plugin
+    # become: true
+    # - name: "Make sure samba daemon is running"
+    # systemd:
+    # state: started
+    # enabled: true
+    # name: smbd
+    # become: true
