@@ -1,0 +1,12 @@
+---
+- name: "Install NPM"
+  apt:
+    name: 
+      - nodejs
+      - npm
+    state: present
+  become: true
+
+- name: "Install protainer backup util"
+  ansible.builtin.shell: npm install --global portainer-backup
+  become: true

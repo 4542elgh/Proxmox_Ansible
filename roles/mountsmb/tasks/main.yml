@@ -6,27 +6,81 @@
     state: present
   become: true
 
-- name: "Create Download folder"
+- name: "Add Docker SMB mount"
+  lineinfile:
+    dest: /etc/fstab
+    line: "//192.168.1.31/Docker /mnt/Docker cifs credentials=/root/.smbcredentials,iocharset=utf8,file_mode=0777,dir_mode=0777"
+    owner: root
+  become: true
+     
+- name: "Create Docker folder"
   ansible.builtin.file:
-    path: /mnt/Download
+    path: /mnt/Docker
     state: directory
     mode: '0755'
   become: true
+    # - name: "Add Dev SMB mount"
+    # lineinfile:
+    # dest: /etc/fstab
+    # line: "//192.168.1.31/Dev /mnt/Dev cifs credentials=/root/.smbcredentials,iocharset=utf8,file_mode=0777,dir_mode=0777"
+    # owner: root
+    # become: true
+    # 
+    # - name: "Create Dev folder"
+    # ansible.builtin.file:
+    # path: /mnt/Dev
+    # state: directory
+    # mode: '0755'
+    # become: true
+    # - name: "Create Download folder"
+    # ansible.builtin.file:
+    # path: /mnt/Download
+    # state: directory
+    # mode: '0755'
+    # become: true
+    # 
+    # - name: "Add Download SMB mount"
+    # lineinfile:
+    # dest: /etc/fstab
+    # line: "//192.168.1.31/Download /mnt/Download cifs credentials=/root/.smbcredentials,iocharset=utf8,file_mode=0777,dir_mode=0777"
+    # owner: root
+    # become: true
 
-- name: "Add Download SMB mount"
-  lineinfile:
-    dest: /etc/fstab
-    line: "//192.168.1.31/Download /mnt/Download cifs credentials=/root/.smbcredentials,iocharset=utf8,file_mode=0777,dir_mode=0777"
-    owner: root
-  become: true
+    # - name: "Create Photo folder"
+    # ansible.builtin.file:
+    # path: /mnt/Photo
+    # state: directory
+    # mode: '0755'
+    # become: true
+    # 
+    # - name: "Add Download SMB mount"
+    # lineinfile:
+    # dest: /etc/fstab
+    # line: "//192.168.1.31/Photo /mnt/Photo cifs credentials=/root/.smbcredentials,iocharset=utf8,file_mode=0777,dir_mode=0777"
+    # owner: root
+    # become: true
 
-- name: "Copy .smbcredentials"
-  ansible.builtin.copy:
-    src: /root/.smbcredentials
-    dest: /root/.smbcredentials
-    owner: root
-    group: root
-    mode: '0700'
+    # - name: "Copy .smbcredentials"
+    # ansible.builtin.copy:
+    # src: /root/.smbcredentials
+    # dest: /root/.smbcredentials
+    # owner: root
+    # group: root
+    # mode: '0700'
+    
+    # - name: "Create Photo folder"
+    # ansible.builtin.file:
+    # path: /mnt/Backup
+    # state: directory
+    # mode: '0755'
+    # become: true
+    # 
+    # - name: "Add Download SMB mount"
+    # lineinfile:
+    # dest: /etc/fstab
+    # line: "//192.168.1.31/Backup /mnt/Backup cifs credentials=/root/.smbcredentials,iocharset=utf8,file_mode=0777,dir_mode=0777"
+    # owner: root
+    # become: true
 
 - name: "Mount Download SMB drive"
   ansible.builtin.shell: mount -a

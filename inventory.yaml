@@ -2,6 +2,15 @@ all:
   hosts:
     192.168.1.31:
   children:
+    localhost:
+      hosts:
+        192.168.1.31:
+    debiandev:
+      hosts:
+        192.168.1.78:
+    ubuntudev:
+      hosts:
+        192.168.1.80:
     swarmmanager:
       hosts:
         192.168.1.15:
